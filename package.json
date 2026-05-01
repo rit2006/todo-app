@@ -1,94 +1,14 @@
-
-// tests/todo.test.js
-// Run with: npm test
-
-const {
-  createTodo,
-  addTodoItem,
-  toggleTodo,
-  deleteTodo,
-  clearCompleted,
-  getFiltered,
-  getPendingCount,
-} = require('../app.js');
-
-// Reset state before each test
-beforeEach(() => {
-  // Reset the todos array and nextId by re-requiring the module
-  const app = require('../app.js');
-  // Direct state reset via module internals
-  while (require('../app.js') && false) {} // force isolation
-});
-
-// ─── createTodo ──────────────────────────────────────────────────────────────
-
-test('createTodo returns an object with correct text', () => {
-  const todo = createTodo('Buy groceries');
-  expect(todo.text).toBe('Buy groceries');
-});
-
-test('createTodo sets done to false by default', () => {
-  const todo = createTodo('Walk the dog');
-  expect(todo.done).toBe(false);
-});
-
-test('createTodo trims whitespace from text', () => {
-  const todo = createTodo('  Clean room  ');
-  expect(todo.text).toBe('Clean room');
-});
-
-test('createTodo throws error on empty string', () => {
-  expect(() => createTodo('')).toThrow('Todo text cannot be empty');
-});
-
-test('createTodo throws error on whitespace-only string', () => {
-  expect(() => createTodo('   ')).toThrow('Todo text cannot be empty');
-});
-
-test('createTodo assigns a unique id', () => {
-  const t1 = createTodo('Task one');
-  const t2 = createTodo('Task two');
-  expect(t1.id).not.toBe(t2.id);
-});
-
-// ─── toggleTodo ──────────────────────────────────────────────────────────────
-
-test('toggleTodo marks a task as done', () => {
-  const todo = addTodoItem('Test task');
-  const toggled = toggleTodo(todo.id);
-  expect(toggled.done).toBe(true);
-});
-
-test('toggleTodo can toggle back to undone', () => {
-  const todo = addTodoItem('Another task');
-  toggleTodo(todo.id);
-  const toggled = toggleTodo(todo.id);
-  expect(toggled.done).toBe(false);
-});
-
-test('toggleTodo throws on invalid id', () => {
-  expect(() => toggleTodo(99999)).toThrow();
-});
-
-// ─── getPendingCount ─────────────────────────────────────────────────────────
-
-test('getPendingCount counts only incomplete tasks', () => {
-  const t1 = addTodoItem('Task A');
-  const t2 = addTodoItem('Task B');
-  addTodoItem('Task C');
-  toggleTodo(t1.id);
-  toggleTodo(t2.id);
-  expect(getPendingCount()).toBe(1);
-});
-
-// ─── clearCompleted ──────────────────────────────────────────────────────────
-
-test('clearCompleted removes only done tasks', () => {
-  const t1 = addTodoItem('Keep me');
-  const t2 = addTodoItem('Remove me');
-  toggleTodo(t2.id);
-  clearCompleted();
-  const remaining = getFiltered();
-  expect(remaining.some(t => t.id === t1.id)).toBe(true);
-  expect(remaining.some(t => t.id === t2.id)).toBe(false);
-});
+{
+  "name": "todo-app",
+  "version": "1.0.0",
+  "description": "Todo app with CI/CD pipeline",
+  "scripts": {
+    "test": "jest --coverage"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
+}
